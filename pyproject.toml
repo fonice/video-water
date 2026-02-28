@@ -1,0 +1,9 @@
+[project]
+name = "dou-video"
+version = "0.1.0"
+description = "批量给视频添加素材或水印"
+requires-python = ">=3.9"
+dependencies = [
+    "moviepy>=1.0.3,<2.0.0",
+    "pillow>=10.0.0",
+]
