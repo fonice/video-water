@@ -43,36 +43,34 @@ uv run python main.py
 
 ## 打包分发
 
-### macOS
+### 自动打包（推荐）
+
+1. 将代码上传到 GitHub
+2. 进入 Actions 页面，会自动运行构建
+3. 下载构建好的安装包：
+   - `DouVideo-Windows` → Windows exe
+   - `DouVideo-macOS` → macOS 应用
+   - `DouVideo-Linux` → Linux 程序
+
+### 本地打包
+
+**macOS:**
 ```bash
-# 安装打包工具
-brew install pyinstaller
-
-# 打包
-pyinstaller --windowed --onefile --name DouVideo --add-binary="/opt/homebrew/bin/ffmpeg:." main.py
-
-# 打包后目录
-cd dist/DouVideo.app/Contents/MacOS/
-# 运行: ./DouVideo
+pip install pyinstaller
+pyinstaller --windowed --onefile --name DouVideo --add-binary="$(which ffmpeg):." main.py
 ```
 
-### Windows
+**Windows:**
 ```powershell
-# 安装打包工具
 pip install pyinstaller
-
-# 打包
-pyinstaller --windowed --onefile --name DouVideo --add-binary="C:/path/to/ffmpeg.exe;." main.py
-
-# 打包后目录
-dist/DouVideo.exe
+pyinstaller --windowed --onefile --name DouVideo main.py
 ```
 
 ### 注意事项
 - 打包后需要包含 ffmpeg
 - macOS 可能需要处理 Gatekeeper 签名：
   ```bash
-  xattr -dr com.apple.quarantine DouVideo.app
+  xattr -dr com.apple.quarantine DouVideo
   ```
 
 ## 参数说明

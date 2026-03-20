@@ -1,0 +1,96 @@
+name: Build Executables
+
+on:
+  push:
+    branches: [main, master]
+  workflow_dispatch:
+
+jobs:
+  build-windows:
+    runs-on: windows-latest
+    
+    steps:
+      - uses: actions/checkout@v4
+      
+      - name: Set up Python
+        uses: actions/setup-python@v5
+        with:
+          python-version: '3.11'
+      
+      - name: Install dependencies
+        run: |
+          python -m pip install --upgrade pip
+          pip install pyinstaller
+      
+      - name: Download ffmpeg
+        run: |
+          Invoke-WebRequest -Uri "https://www.gyan.dev/ffmpeg/builds/ffmpeg-release-essentials.zip" -OutFile "ffmpeg.zip"
+          Expand-Archive -Path "ffmpeg.zip" -DestinationPath "ffmpeg"
+          Copy-Item -Path "ffmpeg/*/bin/ffmpeg.exe" -Destination "."
+      
+      - name: Build
+        run: |
+          pyinstaller --windowed --onefile --name DouVideo --add-binary "ffmpeg.exe;." main.py
+      
+      - name: Upload artifact
+        uses: actions/upload-artifact@v4
+        with:
+          name: DouVideo-Windows
+          path: dist/DouVideo.exe
+
+  build-macos:
+    runs-on: macos-latest
+    
+    steps:
+      - uses: actions/checkout@v4
+      
+      - name: Set up Python
+        uses: actions/setup-python@v5
+        with:
+          python-version: '3.11'
+      
+      - name: Install dependencies
+        run: |
+          python -m pip install --upgrade pip
+          pip install pyinstaller
+          brew install ffmpeg
+      
+      - name: Build
+        run: |
+          pyinstaller --windowed --onefile --name DouVideo --add-binary "$(which ffmpeg):." main.py
+      
+      - name: Upload artifact
+        uses: actions/upload-artifact@v4
+        with:
+          name: DouVideo-macOS
+          path: dist/DouVideo
+      
+      - name: Make executable
+        run: chmod +x dist/DouVideo
+
+  build-linux:
+    runs-on: ubuntu-latest
+    
+    steps:
+      - uses: actions/checkout@v4
+      
+      - name: Set up Python
+        uses: actions/setup-python@v5
+        with:
+          python-version: '3.11'
+      
+      - name: Install dependencies
+        run: |
+          python -m pip install --upgrade pip
+          pip install pyinstaller
+          sudo apt-get update && sudo apt-get install -y ffmpeg
+      
+      - name: Build
+        run: |
+          pyinstaller --windowed --onefile --name DouVideo --add-binary "$(which ffmpeg):." main.py
+      
+      - name: Upload artifact
+        uses: actions/upload-artifact@v4
+        with:
+          name: DouVideo-Linux
+          path: dist/DouVideo
