@@ -17,28 +17,23 @@ jobs:
         with:
           python-version: '3.11'
       
-      - name: Install dependencies
-        run: |
-          python -m pip install --upgrade pip
-          pip install pyinstaller
-      
-      - name: Build
-        run: |
-          pyinstaller --windowed --onefile --name VideoWatermark main.py
-      
       - name: Download ffmpeg
         run: |
           Invoke-WebRequest -Uri "https://www.gyan.dev/ffmpeg/builds/ffmpeg-release-essentials.zip" -OutFile "ffmpeg.zip"
           Expand-Archive -Path "ffmpeg.zip" -DestinationPath "."
-          Move-Item -Path "ffmpeg/*/bin/ffmpeg.exe" -Destination "dist/"
+          Copy-Item -Path "ffmpeg/*/bin/ffmpeg.exe" -Destination "."
+      
+      - name: Install pyinstaller
+        run: pip install pyinstaller
+      
+      - name: Build
+        run: pyinstaller --windowed --onefile --add-binary "ffmpeg.exe;." --name VideoWatermark main.py
       
       - name: Upload artifact
         uses: actions/upload-artifact@v4
         with:
           name: VideoWatermark-Windows
-          path: |
-            dist/VideoWatermark.exe
-            dist/ffmpeg.exe
+          path: dist/VideoWatermark.exe
 
   build-macos:
     runs-on: macos-latest

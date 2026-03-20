@@ -88,6 +88,7 @@ pyinstaller --windowed --onefile --name VideoWatermark main.py
 - **处理失败**：检查视频格式是否支持（H.264/AAC）
 - **界面异常**：可能缺少 tkinter 库
 
-## 下载 ffmpeg
-- Windows: https://www.gyan.dev/ffmpeg/builds/ → 下载 "ffmpeg-release-essentials.zip"
-- 解压后将 `ffmpeg.exe` 放到 `VideoWatermark.exe` 同目录
+## 使用说明
+1. 下载 VideoWatermark-Windows.zip
+2. 解压
+3. 双击 VideoWatermark.exe 运行（无需安装其他软件）

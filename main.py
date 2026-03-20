@@ -16,7 +16,7 @@ import threading
 
 # PyInstaller 打包支持
 if getattr(sys, 'frozen', False):
-    bundle_dir = sys._MEIPASS
+    bundle_dir = getattr(sys, '_MEIPASS', str(Path(sys.executable).parent))
     os.environ['PATH'] = bundle_dir + os.pathsep + os.environ.get('PATH', '')
 
 
