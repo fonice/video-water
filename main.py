@@ -14,6 +14,11 @@ from tkinter import ttk, filedialog, messagebox
 from pathlib import Path
 import threading
 
+# PyInstaller 打包支持
+if getattr(sys, 'frozen', False):
+    bundle_dir = sys._MEIPASS
+    os.environ['PATH'] = bundle_dir + os.pathsep + os.environ.get('PATH', '')
+
 
 class VideoWatermarkApp:
     def __init__(self, root):

@@ -1,4 +1,4 @@
-name: Build Executables
+name: Build
 
 on:
   push:
@@ -22,21 +22,23 @@ jobs:
           python -m pip install --upgrade pip
           pip install pyinstaller
       
+      - name: Build
+        run: |
+          pyinstaller --windowed --onefile --name VideoWatermark main.py
+      
       - name: Download ffmpeg
         run: |
           Invoke-WebRequest -Uri "https://www.gyan.dev/ffmpeg/builds/ffmpeg-release-essentials.zip" -OutFile "ffmpeg.zip"
-          Expand-Archive -Path "ffmpeg.zip" -DestinationPath "ffmpeg"
-          Copy-Item -Path "ffmpeg/*/bin/ffmpeg.exe" -Destination "."
-      
-      - name: Build
-        run: |
-          pyinstaller --windowed --onefile --name DouVideo --add-binary "ffmpeg.exe;." main.py
+          Expand-Archive -Path "ffmpeg.zip" -DestinationPath "."
+          Move-Item -Path "ffmpeg/*/bin/ffmpeg.exe" -Destination "dist/"
       
       - name: Upload artifact
         uses: actions/upload-artifact@v4
         with:
-          name: DouVideo-Windows
-          path: dist/DouVideo.exe
+          name: VideoWatermark-Windows
+          path: |
+            dist/VideoWatermark.exe
+            dist/ffmpeg.exe
 
   build-macos:
     runs-on: macos-latest
@@ -57,16 +59,13 @@ jobs:
       
       - name: Build
         run: |
-          pyinstaller --windowed --onefile --name DouVideo --add-binary "$(which ffmpeg):." main.py
+          pyinstaller --windowed --onefile --name VideoWatermark --add-binary "$(which ffmpeg):." main.py
       
       - name: Upload artifact
         uses: actions/upload-artifact@v4
         with:
-          name: DouVideo-macOS
-          path: dist/DouVideo
-      
-      - name: Make executable
-        run: chmod +x dist/DouVideo
+          name: VideoWatermark-macOS
+          path: dist/VideoWatermark
 
   build-linux:
     runs-on: ubuntu-latest
@@ -87,10 +86,10 @@ jobs:
       
       - name: Build
         run: |
-          pyinstaller --windowed --onefile --name DouVideo --add-binary "$(which ffmpeg):." main.py
+          pyinstaller --windowed --onefile --name VideoWatermark --add-binary "$(which ffmpeg):." main.py
       
       - name: Upload artifact
         uses: actions/upload-artifact@v4
         with:
-          name: DouVideo-Linux
-          path: dist/DouVideo
+          name: VideoWatermark-Linux
+          path: dist/VideoWatermark

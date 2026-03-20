@@ -1,10 +1,10 @@
-# DouVideo - 视频批量加水印工具
+# VideoWatermark - 视频批量加水印工具
 
 ## 功能特点
 - 批量为视频添加 Logo/水印
 - 支持图片（PNG/JPG/GIF）和视频作为水印
 - 可调整：位置、大小、压缩率、帧率、分辨率
-- 极速处理（FFmpeg + 硬件加速）
+- 极速处理（FFmpeg）
 - 配置自动保存
 
 ## 环境要求
@@ -48,29 +48,29 @@ uv run python main.py
 1. 将代码上传到 GitHub
 2. 进入 Actions 页面，会自动运行构建
 3. 下载构建好的安装包：
-   - `DouVideo-Windows` → Windows exe
-   - `DouVideo-macOS` → macOS 应用
-   - `DouVideo-Linux` → Linux 程序
+   - `VideoWatermark-Windows` → Windows exe
+   - `VideoWatermark-macOS` → macOS 应用
+   - `VideoWatermark-Linux` → Linux 程序
 
 ### 本地打包
 
 **macOS:**
 ```bash
 pip install pyinstaller
-pyinstaller --windowed --onefile --name DouVideo --add-binary="$(which ffmpeg):." main.py
+pyinstaller --windowed --onefile --name VideoWatermark --add-binary="$(which ffmpeg):." main.py
 ```
 
 **Windows:**
 ```powershell
 pip install pyinstaller
-pyinstaller --windowed --onefile --name DouVideo main.py
+pyinstaller --windowed --onefile --name VideoWatermark main.py
 ```
 
 ### 注意事项
 - 打包后需要包含 ffmpeg
 - macOS 可能需要处理 Gatekeeper 签名：
   ```bash
-  xattr -dr com.apple.quarantine DouVideo
+  xattr -dr com.apple.quarantine VideoWatermark
   ```
 
 ## 参数说明
@@ -84,6 +84,10 @@ pyinstaller --windowed --onefile --name DouVideo main.py
 | 分辨率 | 输出缩放比例 | 100% |
 
 ## 问题排查
-- **提示找不到 ffmpeg**：确保 ffmpeg 已安装并可访问
+- **提示找不到 ffmpeg**：下载 ffmpeg.exe 放到 VideoWatermark.exe 同目录
 - **处理失败**：检查视频格式是否支持（H.264/AAC）
 - **界面异常**：可能缺少 tkinter 库
+
+## 下载 ffmpeg
+- Windows: https://www.gyan.dev/ffmpeg/builds/ → 下载 "ffmpeg-release-essentials.zip"
+- 解压后将 `ffmpeg.exe` 放到 `VideoWatermark.exe` 同目录
