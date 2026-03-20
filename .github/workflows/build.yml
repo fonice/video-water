@@ -21,7 +21,7 @@ jobs:
         run: |
           Invoke-WebRequest -Uri "https://www.gyan.dev/ffmpeg/builds/ffmpeg-release-essentials.zip" -OutFile "ffmpeg.zip"
           Expand-Archive -Path "ffmpeg.zip" -DestinationPath "."
-          Copy-Item -Path "ffmpeg/*/bin/ffmpeg.exe" -Destination "."
+          Get-ChildItem -Path "." -Recurse -Filter "ffmpeg.exe" | Copy-Item -Destination "."
       
       - name: Install pyinstaller
         run: pip install pyinstaller
